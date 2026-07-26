@@ -1,12 +1,12 @@
 {
-  "projectId": "still-oarlock-mt3g1",
-  "appId": "1:840706703203:web:1210f063b612dfb4399d56",
-  "apiKey": "AIzaSyB9A3N8ukdurZ4zbW5yq0Lwo8gq3F0ZtAM",
-  "authDomain": "still-oarlock-mt3g1.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-kangfinzpay-b41d84b5-d4a4-4424-ab6e-1c4f0daada8d",
-  "storageBucket": "still-oarlock-mt3g1.firebasestorage.app",
-  "messagingSenderId": "840706703203",
-  "measurementId": "",
-  "oAuthClientId": "840706703203-o7c50pvuo2ve1cleutflaov5100p5dlo.apps.googleusercontent.com",
+  "projectId": "kangfinz-pay",
+  "appId": "1:73546619529:web:360615b601d86aa2e04458",
+  "apiKey": "AIzaSyAD-wcqx6PWlb_jIKWNa1C1M-PFzKM1RUA",
+  "authDomain": "kangfinz-pay.firebaseapp.com",
+  "storageBucket": "kangfinz-pay.firebasestorage.app",
+  "messagingSenderId": "73546619529",
+  "measurementId": "G-H9QFWLWGQN",
+  "firestoreDatabaseId": "(default)",
+  "oAuthClientId": "",
   "recaptchaSiteKey": ""
 }
