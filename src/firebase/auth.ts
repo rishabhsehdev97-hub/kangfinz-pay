@@ -25,10 +25,12 @@ export const signInWithGoogle = async (): Promise<FirebaseUser> => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
-  } catch (error) {
-    console.warn("Google Sign-In popup failed or closed, falling back to guest session", error);
-    const anon = await signInAnonymously(auth);
-    return anon.user;
+  } catch (error: any) {
+    console.error("GOOGLE AUTH ERROR:", error);
+    alert(
+      `Error Code: ${error.code}\n\nError Message:\n${error.message}`
+    );
+    throw error;
   }
 };
 
