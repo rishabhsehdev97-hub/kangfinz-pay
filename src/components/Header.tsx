@@ -1,3 +1,4 @@
+import { auth } from "../firebase/config";
 import React from 'react';
 import { Bell, Smartphone, Monitor, ShieldCheck, Sparkles } from 'lucide-react';
 import { TabType } from '../types';
@@ -9,6 +10,7 @@ interface HeaderProps {
   onOpenAI: () => void;
   activeTab?: TabType;
   unreadCount?: number;
+
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -19,6 +21,8 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab = 'home',
   unreadCount = 2,
 }) => {
+  const user = auth.currentUser;
+  console.log("Current Firebase User:", user);
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good Morning';
@@ -31,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
       case 'home':
         return (
           <>
-            {getGreeting()}, Rishabh <span className="animate-bounce inline-block text-sm">👋</span>
+            {getGreeting()}, {user?.displayName || "Guest"} <span className="animate-bounce inline-block text-sm">👋</span>
           </>
         );
       case 'money':
@@ -47,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
       default:
         return (
           <>
-            {getGreeting()}, Rishabh <span className="animate-bounce inline-block text-sm">👋</span>
+            {getGreeting()}, {user?.displayName || "Guest"} <span className="animate-bounce inline-block text-sm">👋</span>
           </>
         );
     }
@@ -63,8 +67,8 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <div className="w-9 h-9 rounded-full p-[2px] bg-gradient-to-tr from-[#0F8A5F] via-[#10B981] to-[#34D399] transition-transform group-hover:scale-105 active:scale-95">
             <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
-              alt="Rishabh Avatar"
+              src={user?.photoURL || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"}
+              alt={user?.displayName || "Guest"}
               className="w-full h-full object-cover rounded-full border-2 border-white"
             />
           </div>

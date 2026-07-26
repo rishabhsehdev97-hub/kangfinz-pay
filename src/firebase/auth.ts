@@ -1,3 +1,4 @@
+import { createUserIfNotExists } from "./userService";
 import {
   signInWithPopup,
   signInAnonymously,
@@ -23,13 +24,19 @@ export const subscribeToAuth = (callback: (user: FirebaseUser | null) => void) =
 
 export const signInWithGoogle = async (): Promise<FirebaseUser> => {
   try {
+    console.log("🚀 Starting Google Sign-In");
+
     const result = await signInWithPopup(auth, googleProvider);
+
+    console.log("✅ Google Sign-In Success", result.user);
+
+    await createUserIfNotExists(result.user);
+
+    console.log("✅ Firestore user created/updated");
+
     return result.user;
-  } catch (error: any) {
-    console.error("GOOGLE AUTH ERROR:", error);
-    alert(
-      `Error Code: ${error.code}\n\nError Message:\n${error.message}`
-    );
+  } catch (error) {
+    console.error("❌ SIGN-IN ERROR:", error);
     throw error;
   }
 };
