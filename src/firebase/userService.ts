@@ -20,22 +20,45 @@ export async function createUserIfNotExists(user: User) {
       console.log("🆕 User doesn't exist. Creating...");
 
       await setDoc(userRef, {
-        uid: user.uid,
-        displayName: user.displayName || "",
-        email: user.email || "",
-        photoURL: user.photoURL || "",
-        provider: user.providerData[0]?.providerId || "google.com",
+  uid: user.uid,
 
-        createdAt: serverTimestamp(),
-        lastLogin: serverTimestamp(),
+  profile: {
+    fullName: user.displayName || "",
+    email: user.email || "",
+    phone: user.phoneNumber || "",
+    photoURL: user.photoURL || "",
+    provider: user.providerData[0]?.providerId || "google.com",
+  },
 
-        walletBalance: 0,
-        linkedBanks: [],
-        upiIds: [],
-        kycStatus: "pending",
+  wallet: {
+    balance: 0,
+    cashback: 0,
+    currency: "INR",
+  },
 
-        appVersion: "1.0.0",
-      });
+  banks: [],
+
+  upi: {
+    ids: [],
+    primary: "",
+  },
+
+  kyc: {
+    status: "pending",
+    verified: false,
+  },
+
+  preferences: {
+    language: "en",
+    theme: "light",
+    notifications: true,
+  },
+
+  createdAt: serverTimestamp(),
+  lastLogin: serverTimestamp(),
+
+  appVersion: "1.0.0",
+});
 
       console.log("✅ Firestore document created");
     } else {
