@@ -1,0 +1,227 @@
+import { MoneySnapshotData, FinancialGoal, Transaction, BillItem, Contact } from '../types';
+
+export const initialMoneySnapshot: MoneySnapshotData = {
+  bankBalance: 184250,
+  cash: 12500,
+  wallet: 4800,
+  investments: 345000,
+  netWorth: 546550, // 184250 + 12500 + 4800 + 345000
+};
+
+export const initialGoals: FinancialGoal[] = [
+  {
+    id: 'goal-1',
+    title: 'Emergency Fund',
+    targetAmount: 100000,
+    currentAmount: 78000,
+    percentage: 78,
+    remainingAmount: 22000,
+    targetDate: 'Aug 2026',
+    category: 'Safety Net',
+  },
+  {
+    id: 'goal-2',
+    title: 'Japan Travel Fund',
+    targetAmount: 250000,
+    currentAmount: 140000,
+    percentage: 56,
+    remainingAmount: 110000,
+    targetDate: 'Dec 2026',
+    category: 'Travel',
+  },
+  {
+    id: 'goal-3',
+    title: 'Tech Upgrade',
+    targetAmount: 180000,
+    currentAmount: 135000,
+    percentage: 75,
+    remainingAmount: 45000,
+    targetDate: 'Nov 2026',
+    category: 'Gadgets',
+  }
+];
+
+export const initialTransactions: Transaction[] = [
+  {
+    id: 'tx-1',
+    title: 'Zomato',
+    category: 'Food & Dining',
+    amount: 420,
+    type: 'debit',
+    date: 'Today',
+    time: '1:15 PM',
+    iconName: 'Utensils',
+    status: 'Success',
+    paymentMethod: 'Kangfinz Wallet',
+    referenceId: 'UPI/6281940129',
+    note: 'Gourmet bowl lunch',
+  },
+  {
+    id: 'tx-2',
+    title: 'Uber',
+    category: 'Travel & Transit',
+    amount: 280,
+    type: 'debit',
+    date: 'Today',
+    time: '9:30 AM',
+    iconName: 'Car',
+    status: 'Success',
+    paymentMethod: 'HDFC Bank ****4092',
+    referenceId: 'UPI/8821039481',
+    note: 'Ride to Work HQ',
+  },
+  {
+    id: 'tx-3',
+    title: 'Amazon',
+    category: 'Shopping',
+    amount: 1499,
+    type: 'debit',
+    date: 'Yesterday',
+    time: '6:45 PM',
+    iconName: 'ShoppingBag',
+    status: 'Success',
+    paymentMethod: 'Kangfinz Pay Later',
+    referenceId: 'AMZN/IN/9283011',
+    note: 'Ergonomic mousepad & book',
+  },
+  {
+    id: 'tx-4',
+    title: 'Electricity Bill',
+    category: 'Utilities & Bills',
+    amount: 2350,
+    type: 'debit',
+    date: '22 Jul',
+    time: '11:00 AM',
+    iconName: 'Zap',
+    status: 'Success',
+    paymentMethod: 'ICICI Direct Bank',
+    referenceId: 'BBPS/882910392',
+    note: 'BSES Rajdhani Delhi',
+  },
+  {
+    id: 'tx-5',
+    title: 'Freelance Payout',
+    category: 'Transfers',
+    amount: 35000,
+    type: 'credit',
+    date: '20 Jul',
+    time: '4:20 PM',
+    iconName: 'ArrowDownLeft',
+    status: 'Success',
+    paymentMethod: 'IMPS Bank Transfer',
+    referenceId: 'NEFT/20260720819',
+    note: 'UI Design Sprint',
+  },
+  {
+    id: 'tx-6',
+    title: 'SIP Mutual Fund',
+    category: 'Investments',
+    amount: 10000,
+    type: 'debit',
+    date: '15 Jul',
+    time: '10:00 AM',
+    iconName: 'TrendingUp',
+    status: 'Success',
+    paymentMethod: 'Auto-Debit HDFC',
+    referenceId: 'MF/2026/99812',
+    note: 'Nifty 50 Index Fund',
+  }
+];
+
+export const initialBills: BillItem[] = [
+  {
+    id: 'bill-1',
+    title: 'Electricity Bill',
+    provider: 'BSES Rajdhani Power',
+    accountNo: '102938475',
+    amount: 2350,
+    dueDate: 'In 4 Days',
+    category: 'Electricity',
+    icon: 'Zap',
+    isPaid: false,
+  },
+  {
+    id: 'bill-2',
+    title: 'High-Speed Broadband',
+    provider: 'Airtel Xstream Fiber',
+    accountNo: '8829102938',
+    amount: 1179,
+    dueDate: 'In 8 Days',
+    category: 'Broadband',
+    icon: 'Wifi',
+    isPaid: false,
+  },
+  {
+    id: 'bill-3',
+    title: 'HDFC Regalia Credit Card',
+    provider: 'HDFC Bank Credit',
+    accountNo: '•••• 8821',
+    amount: 18450,
+    dueDate: 'In 12 Days',
+    category: 'Credit Card',
+    icon: 'CreditCard',
+    isPaid: false,
+  },
+  {
+    id: 'bill-4',
+    title: 'Apartment Water Utility',
+    provider: 'Delhi Jal Board',
+    accountNo: 'DJB-998210',
+    amount: 450,
+    dueDate: 'Paid (20 Jul)',
+    category: 'Water',
+    icon: 'Droplets',
+    isPaid: true,
+  }
+];
+
+export const sampleContacts: Contact[] = [
+  {
+    id: 'c-1',
+    name: 'Priya Sharma',
+    phone: '+91 98765 43210',
+    upiId: 'priya.sharma@okaxis',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+    bankName: 'Axis Bank',
+  },
+  {
+    id: 'c-2',
+    name: 'Rahul Verma',
+    phone: '+91 98123 45678',
+    upiId: 'rahul.verma@icici',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    bankName: 'ICICI Bank',
+  },
+  {
+    id: 'c-3',
+    name: 'Ananya Roy',
+    phone: '+91 97654 32109',
+    upiId: 'ananya.roy@paytm',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    bankName: 'HDFC Bank',
+  },
+  {
+    id: 'c-4',
+    name: 'Vikram Mehta',
+    phone: '+91 99000 11223',
+    upiId: 'vikram.mehta@sbi',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    bankName: 'State Bank of India',
+  }
+];
+
+export const spendingCategoryBreakdown = [
+  { name: 'Food & Dining', value: 4850, color: '#0F8A5F' },
+  { name: 'Utilities & Bills', value: 3840, color: '#3B82F6' },
+  { name: 'Shopping', value: 2990, color: '#F59E0B' },
+  { name: 'Travel', value: 1850, color: '#8B5CF6' },
+  { name: 'Investments', value: 10000, color: '#10B981' },
+];
+
+export const monthlyTrendData = [
+  { month: 'Mar', income: 85000, expenses: 42000, savings: 43000 },
+  { month: 'Apr', income: 88000, expenses: 45000, savings: 43000 },
+  { month: 'May', income: 92000, expenses: 39000, savings: 53000 },
+  { month: 'Jun', income: 90000, expenses: 41000, savings: 49000 },
+  { month: 'Jul', income: 98000, expenses: 38500, savings: 59500 },
+];

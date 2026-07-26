@@ -1,0 +1,6 @@
+{
+  "name": "Kangfinz Pay",
+  "description": "A premium, Apple and Notion inspired fintech mobile experience with smart money insights, balances, quick actions, and AI financial guidance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

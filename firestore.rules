@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is signed in
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check document ownership
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /Users/{userId} {
+      allow read, write: if true;
+    }
+    
+    match /BankAccounts/{docId} {
+      allow read, write: if true;
+    }
+
+    match /Transactions/{docId} {
+      allow read, write: if true;
+    }
+
+    match /Bills/{docId} {
+      allow read, write: if true;
+    }
+
+    match /Contacts/{docId} {
+      allow read, write: if true;
+    }
+
+    match /Notifications/{docId} {
+      allow read, write: if true;
+    }
+
+    match /AIInsights/{docId} {
+      allow read, write: if true;
+    }
+
+    match /UserPreferences/{docId} {
+      allow read, write: if true;
+    }
+
+    match /Goals/{docId} {
+      allow read, write: if true;
+    }
+  }
+}

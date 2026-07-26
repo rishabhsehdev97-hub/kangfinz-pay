@@ -1,0 +1,135 @@
+{
+  "entities": {
+    "Users": {
+      "title": "Users",
+      "description": "User profiles and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "kycVerified": { "type": "boolean" },
+        "tier": { "type": "string" },
+        "upiId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "name"]
+    },
+    "BankAccounts": {
+      "title": "BankAccounts",
+      "description": "Linked bank accounts and balances",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "bankName": { "type": "string" },
+        "accountType": { "type": "string" },
+        "accountNumberLast4": { "type": "string" },
+        "balance": { "type": "number" },
+        "isPrimary": { "type": "boolean" },
+        "autoSwept": { "type": "boolean" }
+      },
+      "required": ["userId", "bankName", "balance"]
+    },
+    "Transactions": {
+      "title": "Transactions",
+      "description": "Payment transactions history",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string" },
+        "category": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "paymentMethod": { "type": "string" },
+        "recipientUpi": { "type": "string" },
+        "status": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["userId", "title", "amount", "type"]
+    },
+    "Bills": {
+      "title": "Bills",
+      "description": "Upcoming bills and EMIs",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "amount": { "type": "number" },
+        "dueDate": { "type": "string" },
+        "icon": { "type": "string" },
+        "isPaid": { "type": "boolean" },
+        "autoPay": { "type": "boolean" }
+      },
+      "required": ["userId", "title", "amount"]
+    },
+    "Contacts": {
+      "title": "Contacts",
+      "description": "Favourite UPI contacts",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "avatar": { "type": "string" },
+        "upiId": { "type": "string" },
+        "bankName": { "type": "string" },
+        "isFavourite": { "type": "boolean" }
+      },
+      "required": ["userId", "name", "upiId"]
+    },
+    "Notifications": {
+      "title": "Notifications",
+      "description": "Alerts and updates",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      }
+    },
+    "AIInsights": {
+      "title": "AIInsights",
+      "description": "Personalized AI financial advice and tips",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "tip": { "type": "string" },
+        "category": { "type": "string" },
+        "actionable": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      }
+    },
+    "UserPreferences": {
+      "title": "UserPreferences",
+      "description": "User app settings and security flags",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "biometricEnabled": { "type": "boolean" },
+        "instantAlerts": { "type": "boolean" },
+        "deviceViewLayout": { "type": "string" },
+        "pinCode": { "type": "string" }
+      }
+    },
+    "Goals": {
+      "title": "Goals",
+      "description": "Savings targets and emergency funds",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "targetAmount": { "type": "number" },
+        "currentAmount": { "type": "number" },
+        "category": { "type": "string" },
+        "targetDate": { "type": "string" }
+      },
+      "required": ["userId", "title", "targetAmount"]
+    }
+  }
+}
