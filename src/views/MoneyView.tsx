@@ -1,8 +1,11 @@
 import {
   addBankAccount,
   getBankAccounts,
+  setPrimaryBank,
+  updateBankAccount,
 } from "../firebase/bankService";
 import React, { useEffect, useState } from 'react';
+import { banks } from "../data/bank";
 import {
   ShieldCheck,
   Eye,
@@ -45,9 +48,17 @@ export const MoneyView: React.FC<MoneyViewProps> = ({
 const [accountHolder, setAccountHolder] = useState("");
 const [accountNumber, setAccountNumber] = useState("");
 const [ifscCode, setIfscCode] = useState("");
-const [banks, setBanks] = useState<any[]>([]);
+const [linkedBanks, setLinkedBanks] = useState<any[]>([]);
 const [selectedBank, setSelectedBank] = useState<any | null>(null);
 const [showBankDetails, setShowBankDetails] = useState(false);
+const [showEditBank, setShowEditBank] = useState(false);
+
+const [editBank, setEditBank] = useState({
+  bankName: "",
+  accountHolder: "",
+  accountNumber: "",
+  ifscCode: "",
+});
 
   const handleAuthSuccess = () => {
     setIsUnlocked(true);
@@ -64,7 +75,7 @@ const [showBankDetails, setShowBankDetails] = useState(false);
   async function loadBanks() {
     try {
       const bankList = await getBankAccounts();
-      setBanks(bankList);
+      setLinkedBanks(bankList);
     } catch (error) {
       console.error("Failed to load bank accounts:", error);
     }
@@ -204,7 +215,7 @@ const [showBankDetails, setShowBankDetails] = useState(false);
                 <Landmark className="w-4 h-4 text-[#0F8A5F]" />
                 <div className="flex items-center justify-between">
   <h3 className="text-[15px] font-semibold text-[#1A1A1A]">
-    Bank Accounts ({banks.length})
+    Bank Accounts ({linkedBanks.length})
   </h3>
 
   <button
@@ -223,7 +234,7 @@ const [showBankDetails, setShowBankDetails] = useState(false);
             <div className="space-y-2">
               
 
-              {banks.map((bank, index) => (
+              {linkedBanks.map((bank, index) => (
   <div
   key={index}
   onClick={() => {
@@ -238,9 +249,17 @@ const [showBankDetails, setShowBankDetails] = useState(false);
       </div>
 
       <div>
-        <h4 className="text-[13px] font-medium text-[#1A1A1A]">
-          {bank.bankName}
-        </h4>
+        <div className="flex items-center gap-2">
+  <h4 className="text-[13px] font-medium text-[#1A1A1A]">
+    {bank.bankName}
+  </h4>
+
+  {bank.isPrimary && (
+    <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-semibold text-yellow-700">
+      ⭐ Primary
+    </span>
+  )}
+</div>
 
         <p className="text-[11px] text-gray-500 font-mono">
           •••• {bank.accountNumber.slice(-4)}
@@ -397,13 +416,19 @@ const [showBankDetails, setShowBankDetails] = useState(false);
         Add Bank Account
       </h2>
 
-      <input
-  type="text"
-  placeholder="Bank Name"
+      <select
   value={bankName}
   onChange={(e) => setBankName(e.target.value)}
-  className="w-full border rounded-lg p-3 mb-3"
-/>
+  className="w-full border rounded-lg p-3 mb-3 bg-white"
+>
+  <option value="">Select Bank</option>
+
+  {banks.map((bank) => (
+    <option key={bank.id} value={bank.name}>
+      {bank.name}
+    </option>
+  ))}
+</select>
 
       <input
   type="text"
@@ -428,6 +453,7 @@ const [showBankDetails, setShowBankDetails] = useState(false);
   onChange={(e) => setIfscCode(e.target.value)}
   className="w-full border rounded-lg p-3 mb-4"
 />
+
 
       <div className="flex justify-end gap-3">
         <button
@@ -484,6 +510,7 @@ const [showBankDetails, setShowBankDetails] = useState(false);
           ✕
         </button>
       </div>
+      
 
       <div className="space-y-4">
 
@@ -511,16 +538,127 @@ const [showBankDetails, setShowBankDetails] = useState(false);
 
       </div>
 
-      <button
-        onClick={() => setShowBankDetails(false)}
-        className="mt-6 w-full rounded-lg bg-[#0F8A5F] text-white py-3"
-      >
-        Close
-      </button>
+      {selectedBank?.isPrimary ? (
+  <button
+    disabled
+    className="w-full rounded-lg bg-yellow-100 text-yellow-700 py-3 mb-3 cursor-not-allowed font-semibold"
+  >
+    ⭐ This is your Primary Bank
+  </button>
+) : (
+  <button
+    onClick={async () => {
+      if (!selectedBank) return;
+
+      await setPrimaryBank(selectedBank.accountNumber);
+
+      const updatedBanks = await getBankAccounts();
+      setBanks(updatedBanks);
+
+      setSelectedBank(
+        updatedBanks.find(
+          (bank: any) =>
+            bank.accountNumber === selectedBank.accountNumber
+        )
+      );
+    }}
+    className="w-full rounded-lg bg-yellow-500 text-white py-3 mb-3"
+  >
+    ⭐ Set as Primary
+  </button>
+)}
+
+<button
+  onClick={() => {
+    if (!selectedBank) return;
+
+    setEditBank({
+      bankName: selectedBank.bankName,
+      accountHolder: selectedBank.accountHolder,
+      accountNumber: selectedBank.accountNumber,
+      ifscCode: selectedBank.ifscCode,
+    });
+
+    setShowBankDetails(false);
+    setShowEditBank(true);
+  }}
+  className="w-full rounded-lg bg-blue-600 text-white py-3 mb-3"
+>
+  ✏️ Edit Bank
+</button>
+<button
+  onClick={() => setShowBankDetails(false)}
+  className="w-full rounded-lg bg-[#0F8A5F] text-white py-3"
+>
+  Close
+</button>
 
     </div>
   </div>
 )}
+{showEditBank && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="w-[90%] max-w-md rounded-2xl bg-white p-6 shadow-xl">
+
+      <h2 className="text-xl font-semibold mb-5">
+        ✏️ Edit Bank
+      </h2>
+
+      <input
+        type="text"
+        placeholder="Bank Name"
+        value={editBank.bankName}
+        onChange={(e) =>
+          setEditBank({
+            ...editBank,
+            bankName: e.target.value,
+          })
+        }
+        className="w-full border rounded-lg p-3 mb-3"
+      />
+
+      <input
+        type="text"
+        placeholder="Account Holder"
+        value={editBank.accountHolder}
+        onChange={(e) =>
+          setEditBank({
+            ...editBank,
+            accountHolder: e.target.value,
+          })
+        }
+        className="w-full border rounded-lg p-3 mb-3"
+      />
+      <input
+  type="text"
+  placeholder="Account Number"
+  value={editBank.accountNumber}
+  onChange={(e) =>
+    setEditBank({
+      ...editBank,
+      accountNumber: e.target.value,
+    })
+  }
+  className="w-full border rounded-lg p-3 mb-3"
+/>
+
+<input
+  type="text"
+  placeholder="IFSC Code"
+  value={editBank.ifscCode}
+  onChange={(e) =>
+    setEditBank({
+      ...editBank,
+      ifscCode: e.target.value,
+    })
+  }
+  className="w-full border rounded-lg p-3 mb-4"
+/>
+
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
