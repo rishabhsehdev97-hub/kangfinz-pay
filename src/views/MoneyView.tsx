@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import {
+  addBankAccount,
+  getBankAccounts,
+} from "../firebase/bankService";
+import React, { useEffect, useState } from 'react';
 import {
   ShieldCheck,
   Eye,
@@ -36,6 +40,12 @@ export const MoneyView: React.FC<MoneyViewProps> = ({
   // Default privacy state is ALWAYS hidden every time the component loads
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [showAddBank, setShowAddBank] = useState(false);
+  const [bankName, setBankName] = useState("");
+const [accountHolder, setAccountHolder] = useState("");
+const [accountNumber, setAccountNumber] = useState("");
+const [ifscCode, setIfscCode] = useState("");
+const [banks, setBanks] = useState<any[]>([]);
 
   const handleAuthSuccess = () => {
     setIsUnlocked(true);
@@ -48,6 +58,18 @@ export const MoneyView: React.FC<MoneyViewProps> = ({
   const formatCurrency = (amount: number) => {
     return `₹${amount.toLocaleString('en-IN')}`;
   };
+  useEffect(() => {
+  async function loadBanks() {
+    try {
+      const bankList = await getBankAccounts();
+      setBanks(bankList);
+    } catch (error) {
+      console.error("Failed to load bank accounts:", error);
+    }
+  }
+
+  loadBanks();
+}, []);
 
   return (
     <div className="space-y-3 pb-4">
@@ -178,7 +200,18 @@ export const MoneyView: React.FC<MoneyViewProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <Landmark className="w-4 h-4 text-[#0F8A5F]" />
-                <h3 className="text-[15px] font-semibold text-[#1A1A1A]">Bank Accounts (2)</h3>
+                <div className="flex items-center justify-between">
+  <h3 className="text-[15px] font-semibold text-[#1A1A1A]">
+    Bank Accounts ({banks.length})
+  </h3>
+
+  <button
+  onClick={() => setShowAddBank(true)}
+  className="text-[12px] font-semibold text-[#0F8A5F]"
+>
+  + Add Bank
+</button>
+</div>
               </div>
               <span className="text-[11px] font-semibold text-[#0F8A5F]">
                 Total: {formatCurrency(data.bankBalance + 68400)}
@@ -186,39 +219,34 @@ export const MoneyView: React.FC<MoneyViewProps> = ({
             </div>
 
             <div className="space-y-2">
-              <div className="p-2.5 rounded-xl bg-[#FAFAF8] border border-black/[0.04] flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center font-bold text-xs text-blue-700">
-                    HDFC
-                  </div>
-                  <div>
-                    <h4 className="text-[13px] font-medium text-[#1A1A1A]">HDFC Bank Savings</h4>
-                    <p className="text-[11px] text-gray-500 font-mono">•••• 4092 • Primary UPI</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="text-[14px] font-semibold text-[#1A1A1A]">
-                    {formatCurrency(data.bankBalance)}
-                  </span>
-                  <p className="text-[10px] text-emerald-600 font-medium">Auto-Swept</p>
-                </div>
-              </div>
+              
 
-              <div className="p-2.5 rounded-xl bg-[#FAFAF8] border border-black/[0.04] flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center font-bold text-xs text-orange-600">
-                    ICICI
-                  </div>
-                  <div>
-                    <h4 className="text-[13px] font-medium text-[#1A1A1A]">ICICI Bank iMobile</h4>
-                    <p className="text-[11px] text-gray-500 font-mono">•••• 8821 • Salary Acc</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="text-[14px] font-semibold text-[#1A1A1A]">{formatCurrency(68400)}</span>
-                  <p className="text-[10px] text-gray-500 font-normal">Standard</p>
-                </div>
-              </div>
+              {banks.map((bank, index) => (
+  <div
+    key={index}
+    className="p-2.5 rounded-xl bg-[#FAFAF8] border border-black/[0.04] flex items-center justify-between"
+  >
+    <div className="flex items-center gap-2.5">
+      <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+        🏦
+      </div>
+
+      <div>
+        <h4 className="text-[13px] font-medium text-[#1A1A1A]">
+          {bank.bankName}
+        </h4>
+
+        <p className="text-[11px] text-gray-500 font-mono">
+          •••• {bank.accountNumber.slice(-4)}
+        </p>
+      </div>
+    </div>
+
+    <span className="text-[12px] text-[#0F8A5F] font-semibold">
+      Linked
+    </span>
+  </div>
+))}
             </div>
           </div>
 
@@ -356,6 +384,84 @@ export const MoneyView: React.FC<MoneyViewProps> = ({
         onClose={() => setIsAuthModalOpen(false)}
         onSuccess={handleAuthSuccess}
       />
+      {showAddBank && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="w-[90%] max-w-md rounded-2xl bg-white p-6 shadow-xl">
+      <h2 className="text-lg font-semibold mb-4">
+        Add Bank Account
+      </h2>
+
+      <input
+  type="text"
+  placeholder="Bank Name"
+  value={bankName}
+  onChange={(e) => setBankName(e.target.value)}
+  className="w-full border rounded-lg p-3 mb-3"
+/>
+
+      <input
+  type="text"
+  placeholder="Account Holder Name"
+  value={accountHolder}
+  onChange={(e) => setAccountHolder(e.target.value)}
+  className="w-full border rounded-lg p-3 mb-3"
+/>
+
+      <input
+  type="text"
+  placeholder="Account Number"
+  value={accountNumber}
+  onChange={(e) => setAccountNumber(e.target.value)}
+  className="w-full border rounded-lg p-3 mb-3"
+/>
+
+      <input
+  type="text"
+  placeholder="IFSC Code"
+  value={ifscCode}
+  onChange={(e) => setIfscCode(e.target.value)}
+  className="w-full border rounded-lg p-3 mb-4"
+/>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setShowAddBank(false)}
+          className="px-4 py-2 rounded-lg border"
+        >
+          Cancel
+        </button>
+
+        <button
+  onClick={async () => {
+    try {
+      await addBankAccount({
+        bankName,
+        accountHolder,
+        accountNumber,
+        ifscCode,
+      });
+
+      alert("Bank account added successfully!");
+
+      setShowAddBank(false);
+
+      setBankName("");
+      setAccountHolder("");
+      setAccountNumber("");
+      setIfscCode("");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to save bank account.");
+    }
+  }}
+  className="px-4 py-2 rounded-lg bg-[#0F8A5F] text-white"
+>
+  Save
+</button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

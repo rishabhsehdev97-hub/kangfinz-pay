@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getWalletData } from "./firebase/walletService";
 import { Header } from './components/Header';
 import { HomeActionGrid } from './components/HomeActionGrid';
 import { FavouriteContacts } from './components/FavouriteContacts';
@@ -37,11 +38,42 @@ import {
 import { TabType, Transaction, FinancialGoal, BillItem, MoneySnapshotData } from './types';
 
 export default function App() {
+  console.log("🔥 APP COMPONENT RENDERED");
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [isFrameView, setIsFrameView] = useState<boolean>(true);
 
   // Core Financial State
   const [moneySnapshot, setMoneySnapshot] = useState<MoneySnapshotData>(initialMoneySnapshot);
+  useEffect(() => {
+  console.log("🚀 useEffect started");
+
+  async function loadWallet() {
+    console.log("📦 loadWallet called");
+
+    try {
+      const result = await getWalletData();
+
+      console.log("Result:", result);
+
+      if (result.wallet) {
+        setMoneySnapshot((prev) => ({
+          ...prev,
+          wallet: result.wallet.balance,
+        }));
+
+        console.log("✅ Wallet loaded:", result.wallet);
+      } else {
+        console.warn("⚠️ Wallet is undefined");
+      }
+    } catch (err) {
+      console.error("❌ Failed to load wallet:", err);
+    }
+  }
+
+  loadWallet();
+}, []);
+
+  
   const [goals, setGoals] = useState<FinancialGoal[]>(initialGoals);
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
   const [bills, setBills] = useState<BillItem[]>(initialBills);
