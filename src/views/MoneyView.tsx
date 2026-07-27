@@ -46,6 +46,8 @@ const [accountHolder, setAccountHolder] = useState("");
 const [accountNumber, setAccountNumber] = useState("");
 const [ifscCode, setIfscCode] = useState("");
 const [banks, setBanks] = useState<any[]>([]);
+const [selectedBank, setSelectedBank] = useState<any | null>(null);
+const [showBankDetails, setShowBankDetails] = useState(false);
 
   const handleAuthSuccess = () => {
     setIsUnlocked(true);
@@ -223,9 +225,13 @@ const [banks, setBanks] = useState<any[]>([]);
 
               {banks.map((bank, index) => (
   <div
-    key={index}
-    className="p-2.5 rounded-xl bg-[#FAFAF8] border border-black/[0.04] flex items-center justify-between"
-  >
+  key={index}
+  onClick={() => {
+    setSelectedBank(bank);
+    setShowBankDetails(true);
+  }}
+  className="p-2.5 rounded-xl bg-[#FAFAF8] border border-black/[0.04] flex items-center justify-between cursor-pointer"
+>
     <div className="flex items-center gap-2.5">
       <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
         🏦
@@ -459,6 +465,59 @@ const [banks, setBanks] = useState<any[]>([]);
   Save
 </button>
       </div>
+    </div>
+  </div>
+)}
+{showBankDetails && selectedBank && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="w-[90%] max-w-md rounded-2xl bg-white p-6 shadow-xl">
+
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="text-xl font-semibold">
+          🏦 {selectedBank.bankName}
+        </h2>
+
+        <button
+          onClick={() => setShowBankDetails(false)}
+          className="text-gray-500 text-xl"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="space-y-4">
+
+        <div>
+          <p className="text-gray-500 text-sm">Account Holder</p>
+          <p className="font-semibold">{selectedBank.accountHolder}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500 text-sm">Account Number</p>
+          <p className="font-semibold">{selectedBank.accountNumber}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500 text-sm">IFSC Code</p>
+          <p className="font-semibold">{selectedBank.ifscCode}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500 text-sm">Status</p>
+          <p className="text-green-600 font-semibold">
+            🟢 Linked
+          </p>
+        </div>
+
+      </div>
+
+      <button
+        onClick={() => setShowBankDetails(false)}
+        className="mt-6 w-full rounded-lg bg-[#0F8A5F] text-white py-3"
+      >
+        Close
+      </button>
+
     </div>
   </div>
 )}
