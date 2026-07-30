@@ -1,3 +1,4 @@
+import SplashScreen from "../views/SplashScreen";
 import { useEffect, useState } from 'react';
 import App from '../App';
 import LoginScreen from './LoginScreen';
@@ -17,12 +18,8 @@ export default function AuthGate() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
+  return <SplashScreen />;
+}
 
   return user ? <App /> : <LoginScreen />;
 }

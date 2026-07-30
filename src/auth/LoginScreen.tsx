@@ -14,23 +14,24 @@ export default function LoginScreen() {
         </p>
 
         <button
-          onClick={async () => {
-            try {
-              await signInWithGoogle();
-            } catch (err) {
-              console.error(err);
-            }
-          }}
-          className="w-full mt-10 bg-[#0F8A5F] text-white py-4 rounded-2xl font-semibold hover:bg-[#0B6E4C] transition"
-        >
-          Continue with Google
-        </button>
+  onClick={async () => {
+    try {
+      await signInWithGoogle();
+    } catch (err) {
+      console.error(err);
+    }
+  }}
+  className="w-full mt-10 bg-[#0F8A5F] text-white py-4 rounded-2xl font-semibold hover:bg-[#0B6E4C] transition"
+>
+  Continue with Google
+</button>
 
         <button
-          className="w-full mt-4 border border-gray-300 py-4 rounded-2xl font-semibold"
-        >
-          Continue with Phone Number
-        </button>
+  onClick={() => {}}
+  className="w-full mt-4 border border-gray-300 py-4 rounded-2xl font-semibold"
+>
+  Continue with Phone Number
+</button>
       </div>
     </div>
   );

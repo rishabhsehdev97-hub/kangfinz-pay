@@ -40,8 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
         );
       case 'money':
         return 'Private Vault';
-      case 'payments':
-        return 'Payments';
+  
       case 'ai':
         return 'AI Financial Assistant';
       case 'insights':

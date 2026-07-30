@@ -553,7 +553,7 @@ const [editBank, setEditBank] = useState({
       await setPrimaryBank(selectedBank.accountNumber);
 
       const updatedBanks = await getBankAccounts();
-      setBanks(updatedBanks);
+      setLinkedBanks(updatedBanks);
 
       setSelectedBank(
         updatedBanks.find(

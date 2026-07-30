@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { getWalletData } from "./firebase/walletService";
 import { Header } from './components/Header';
@@ -41,6 +42,7 @@ export default function App() {
   console.log("🔥 APP COMPONENT RENDERED");
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [isFrameView, setIsFrameView] = useState<boolean>(true);
+
 
   // Core Financial State
   const [moneySnapshot, setMoneySnapshot] = useState<MoneySnapshotData>(initialMoneySnapshot);
@@ -230,6 +232,8 @@ export default function App() {
     setAiInitialPrompt(prompt);
     setIsAskAIOpen(true);
   };
+  
+
 
   return (
     <div className="min-h-screen bg-[#FAFAF8] text-[#1A1A1A] font-sans antialiased selection:bg-emerald-100 flex flex-col items-center justify-center p-0 sm:p-4">
