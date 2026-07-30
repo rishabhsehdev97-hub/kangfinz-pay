@@ -1,8 +1,12 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { ShieldCheck, Smartphone, ArrowRight } from "lucide-react";
 import { signInWithGoogle } from "../firebase/auth";
+import { sendOTP } from "../firebase/phoneAuth";
 
 export default function LoginScreen() {
+const [phone, setPhone] = useState("");
+const [loading, setLoading] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#F8FCFA] via-white to-[#EEF8F3] flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
@@ -39,20 +43,43 @@ export default function LoginScreen() {
             </span>
 
             <input
-              type="tel"
-              placeholder="Enter mobile number"
-              className="ml-3 flex-1 outline-none bg-transparent"
-            />
+  type="tel"
+  placeholder="Enter mobile number"
+  value={phone}
+  onChange={(e) => setPhone(e.target.value)}
+  className="ml-3 flex-1 outline-none bg-transparent"
+/>
+
           </div>
         </div>
 
         {/* Continue Button */}
         <button
-          className="w-full mt-5 bg-[#0F8A5F] text-white py-4 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-[#0B6E4C] transition"
-        >
-          Continue
-          <ArrowRight className="w-5 h-5" />
-        </button>
+  onClick={async () => {
+    if (phone.length !== 10) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await sendOTP(`+91${phone}`);
+
+      alert("OTP sent successfully.");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }}
+  className="w-full mt-5 bg-[#0F8A5F] text-white py-4 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-[#0B6E4C] transition"
+>
+  {loading ? "Sending OTP..." : "Continue"}
+
+  {!loading && <ArrowRight className="w-5 h-5" />}
+</button>
 
         {/* Divider */}
         <div className="flex items-center my-8">
@@ -93,6 +120,7 @@ export default function LoginScreen() {
         </p>
 
       </div>
+      <div id="recaptcha-container"></div>
     </div>
   );
 }
